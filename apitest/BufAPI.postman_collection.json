@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "1ba6927d-c9ee-4f6e-a5cb-3cb68e51121a",
+		"name": "BufAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3636/api/bufab/v1/admin/user/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3636",
+					"path": [
+						"api",
+						"bufab",
+						"v1",
+						"admin",
+						"user",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST sign in",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"jimmy\",\n    \"password\": \"abc123xyz\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3636/api/bufab/v1/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3636",
+					"path": [
+						"api",
+						"bufab",
+						"v1",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"jimmy\",\n    \"realname\": \"Jimmy Jonsson\",\n    \"password\": \"abc123xyz\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3636/api/bufab/v1/admin/user/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3636",
+					"path": [
+						"api",
+						"bufab",
+						"v1",
+						"admin",
+						"user",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
