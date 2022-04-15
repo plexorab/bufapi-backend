@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const { verifySignIn } = require('../helpers/auth');
 const { createSession, validateSession } = require('../helpers/session');
-const log = require('../helpers/log');
+// const log = require('../helpers/log');
 
 module.exports = (app, pool) => {
   /*
@@ -28,8 +28,15 @@ module.exports = (app, pool) => {
       console.log('sessionid = ', req.headers.sessionid);
       validateSession(pool, req.headers.sessionid)
         .then((r) => {
-          // console.log(r);
-          return next();
+          if (r.success) {
+            console.log(r.data);
+            return next();
+          }
+          res.status(401).send({
+            success: false,
+            data: null,
+            message: r.data,
+          });
         })
         .catch((e) => {
           console.error(e);
@@ -54,7 +61,7 @@ module.exports = (app, pool) => {
       verifySignIn(pool, req.body.username, req.body.password)
         .then((response) => {
           if (response) {
-            createSession(pool)
+            createSession(pool, req.body.username)
               .then((r) => {
                 res.status(200).send({
                   success: true,

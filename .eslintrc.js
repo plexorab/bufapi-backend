@@ -13,5 +13,6 @@ module.exports = {
   rules: {
     'no-console': 'off',
     camelcase: 'off',
+    'linebreak-style': 'off',
   },
 };

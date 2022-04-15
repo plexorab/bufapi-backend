@@ -9,8 +9,8 @@ create table bufapi_user
     username  varchar(100)             not null,
     realname  varchar(255)             not null,
     password  varchar(255)              not null,
-    createdat timestamp not null,
-    updatedat timestamp null
+    createdat timestamptz not null,
+    updatedat timestamptz null
 );
 
 alter table bufapi_user
@@ -33,8 +33,9 @@ create table bufapi_session
     sessionid varchar(100) not null
         constraint bufapi_session_pk
             primary key,
-    createdat timestamp not null,
-    expiresat timestamp not null
+    username  varchar(100) not null,
+    createdat timestamptz not null,
+    expiresat timestamptz not null
 );
 
 alter table bufapi_session
