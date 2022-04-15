@@ -8,13 +8,17 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   app.get('/api/bufab/v1/admin/user/list', (req, res) => {
     pool.connect().then((client) => client
-      .query('SELECT * FROM bufapi_users')
+      .query('SELECT * FROM bufapi_user')
       .then((response) => {
         client.release();
-        log.info(response);
+        // Obfuscate password in response
+        const rObj = response.rows.map((e) => {
+          e.password = '******';
+          return e;
+        });
         res.status(200).send({
           success: true,
-          data: response.rows,
+          data: rObj,
           message: 'OK',
         });
       })
@@ -40,7 +44,7 @@ module.exports = async (app, pool) => {
         message: 'Query parameter userid is missing',
       });
     } else {
-      const sqlcmd = 'SELECT * FROM bufapi_users WHERE userid = $1';
+      const sqlcmd = 'SELECT * FROM bufapi_user WHERE userid = $1';
       const params = [req.query.userid];
       pool.connect().then((client) => client
         .query(sqlcmd, params)
@@ -76,7 +80,7 @@ module.exports = async (app, pool) => {
         message: 'Query parameter username is missing',
       });
     } else {
-      const sqlcmd = 'SELECT * FROM bufapi_users WHERE username = $1';
+      const sqlcmd = 'SELECT * FROM bufapi_user WHERE username = $1';
       const params = [req.query.username];
       pool.connect().then((client) => client
         .query(sqlcmd, params)
@@ -117,7 +121,7 @@ module.exports = async (app, pool) => {
       hashPassword(req.body.password)
         .then((hashedPassword) => {
           console.log(hashedPassword);
-          const sqlcmd = 'INSERT INTO bufapi_users (username, realname, password) '
+          const sqlcmd = 'INSERT INTO bufapi_user (username, realname, password) '
         + 'VALUES($1, $2, $3)';
           const params = [req.body.username, req.body.realname, hashedPassword];
           pool.connect().then((client) => client

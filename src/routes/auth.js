@@ -1,29 +1,45 @@
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const { verifySignIn } = require('../helpers/auth');
+const { createSession, validateSession } = require('../helpers/session');
 const log = require('../helpers/log');
 
 module.exports = (app, pool) => {
   /*
   ** This route intercepts everything directed
-  ** to /api/bufscan/*
+  ** to /api/bufab/*
   */
   app.use('/api/bufab', (req, res, next) => {
-    // console.log(`DEVELOPMENT_MODE=${process.env.DEVELOPMENT_MODE}`);
-    if (process.env.DEVELOPMENT_MODE) {
-      console.log('DEVELOPMENT_MODE = true');
+    if (process.env.DEVELOPMENT_MODE > 0) {
+      console.log('DEVELOPMENT_MODE');
       return next();
     }
-    if (req.headers.authorization === `Bearer ${process.env.AUTH_TOKEN}`) {
-      console.log('Auth OK');
+    if (req.originalUrl === process.env.SIGNIN_URL) {
+      // console.log('Sign in request');
       return next();
     }
-    console.log('Auth NOT_OK');
-    res.status(401).send({
-      success: false,
-      data: '',
-      message: 'Unauthorized',
-    });
+    if (!req.headers.sessionid) {
+      res.status(401).send({
+        success: false,
+        data: null,
+        message: 'No sessionid supplied',
+      });
+    } else {
+      console.log('sessionid = ', req.headers.sessionid);
+      validateSession(pool, req.headers.sessionid)
+        .then((r) => {
+          // console.log(r);
+          return next();
+        })
+        .catch((e) => {
+          console.error(e);
+          res.status(401).send({
+            success: false,
+            data: null,
+            message: 'Invalid sessionid',
+          });
+        });
+    }
   });
 
   app.post(
@@ -38,11 +54,21 @@ module.exports = (app, pool) => {
       verifySignIn(pool, req.body.username, req.body.password)
         .then((response) => {
           if (response) {
-            res.status(200).send({
-              success: true,
-              data: response,
-              message: 'You are singned in successfully',
-            });
+            createSession(pool)
+              .then((r) => {
+                res.status(200).send({
+                  success: true,
+                  data: r,
+                  message: 'You are signed in successfully',
+                });
+              })
+              .catch((e) => {
+                res.status(400).send({
+                  success: false,
+                  data: null,
+                  message: e.toString(),
+                });
+              });
           } else {
             res.status(200).send({
               success: false,

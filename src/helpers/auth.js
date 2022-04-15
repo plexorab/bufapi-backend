@@ -3,7 +3,7 @@ const log = require('./log');
 const { verify } = require('jsonwebtoken');
 
 const getUser = (pool, username) => new Promise((resolve, reject) => {
-  const sqlcmd = 'SELECT * FROM bufapi_users WHERE username = $1';
+  const sqlcmd = 'SELECT * FROM bufapi_user WHERE username = $1';
   const params = [username];
   pool.connect().then((client) => client
     .query(sqlcmd, params)
