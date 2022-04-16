@@ -1,10 +1,18 @@
-const jwt = require('jsonwebtoken');
+const requestIp = require('request-ip');
 const { body, validationResult } = require('express-validator');
 const { verifySignIn } = require('../helpers/auth');
 const { createSession, validateSession } = require('../helpers/session');
 // const log = require('../helpers/log');
 
 module.exports = (app, pool) => {
+  app.use(requestIp.mw());
+
+  app.use((req, res, next) => {
+    const ip = req.clientIp;
+    res.locals.clientip = ip;
+    // console.log(ip);
+    return next();
+  });
   /*
   ** This route intercepts everything directed
   ** to /api/bufab/*
@@ -26,6 +34,7 @@ module.exports = (app, pool) => {
       });
     } else {
       console.log('sessionid = ', req.headers.sessionid);
+      console.log('client ip = ', res.locals.clientip);
       validateSession(pool, req.headers.sessionid)
         .then((r) => {
           if (r.success) {
@@ -61,7 +70,7 @@ module.exports = (app, pool) => {
       verifySignIn(pool, req.body.username, req.body.password)
         .then((response) => {
           if (response) {
-            createSession(pool, req.body.username)
+            createSession(pool, req.body.username, res.locals.clientip)
               .then((r) => {
                 res.status(200).send({
                   success: true,

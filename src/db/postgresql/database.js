@@ -1,13 +1,12 @@
 const pg = require('pg');
+const log = require('../../helpers/log');
 const { pgsqlConfig } = require('./config');
 
-pg.types.setTypeParser(1114, function(stringValue) {
-    return new Date(Date.parse(stringValue + "+0000"));
-});
+pg.types.setTypeParser(1114, (stringValue) => new Date(Date.parse(`${stringValue}+0000`)));
 
 const pgsqlCreatePool = () => {
   const pool = new pg.Pool(pgsqlConfig);
-  console.log('PostgreSQL pool created.');
+  log.info('PostgreSQL pool created.');
   return pool;
 };
 

@@ -1,6 +1,5 @@
 const sql = require('mssql');
-const log = require('../log/log');
-// const config = require('./config');
+const log = require('../../helpers/log');
 
 const createPool = (config) => new Promise((resolve, reject) => {
   log.debug('Trying to connect to database (async)');

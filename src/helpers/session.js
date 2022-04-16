@@ -4,17 +4,15 @@ const log = require('./log');
 
 const addMinutes = (date, minutes) => moment(date).add(minutes, 'm').toDate();
 
-const createSession = (pool, username) => new Promise((resolve, reject) => {
+const createSession = (pool, username, clientip) => new Promise((resolve, reject) => {
   const uuid = uuidv4();
-  // const timeNow = moment().utcOffset(0, true).format();
-  // const expires = moment(addMinutes(timeNow, process.env.SESSION_TTL)).utcOffset(0, true).format();
   const timeNow = moment().format();
   const expires = addMinutes(timeNow, process.env.SESSION_TTL);
   console.log('timeNow = ', timeNow);
   console.log('expires = ', expires);
-  const sqlcmd = 'INSERT INTO bufapi_session(sessionid, username, createdat, expiresat)'
-    + ' VALUES($1,$2,$3, $4) RETURNING sessionid';
-  const params = [uuid, username, timeNow, expires];
+  const sqlcmd = 'INSERT INTO bufapi_session(sessionid, username, clientip, createdat, expiresat)'
+    + ' VALUES($1,$2,$3,$4,$5) RETURNING sessionid';
+  const params = [uuid, username, clientip, timeNow, expires];
   pool.connect().then((client) => client
     .query(sqlcmd, params)
     .then((response) => {
