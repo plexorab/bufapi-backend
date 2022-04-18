@@ -68,6 +68,7 @@ create table bufapi_endpoint_conn
 (
     connid  serial constraint bufapi_endpoint_conn_pk primary key,
     connname varchar(100) not null,
+    endpointid integer not null,
     dbtype varchar(100) not null,
     dbhost varchar(100) not null,
     dbport integer not null,

@@ -51,6 +51,7 @@ app.use(compression({
 
 require('./routes/auth')(app, pgpool);
 require('./routes/admin')(app, pgpool);
+require('./routes/dynapi')(app, pgpool);
 // require('./routes/superoffice')(app, pool);
 
 module.exports = app;
