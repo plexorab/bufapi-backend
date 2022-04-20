@@ -114,7 +114,7 @@ const executeDynQuery = async (pgPool, username, endpointid) => {
     const endpointObj = await getEndpointData(pgPool, endpointid);
     const endpointConnObj = await getEndpointConnectionData(pgPool, endpointid);
     const connectionConfig = parseConnection(endpointConnObj);
-    const result = await executeQuery(connectionConfig, endpointObj.endpoint_query);
+    const result = await executeQuery(connectionConfig, endpointObj.endpointquery);
     return result.recordset;
   } catch (err) {
     console.error(err);
