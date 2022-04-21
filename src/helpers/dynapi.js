@@ -89,6 +89,8 @@ const parseConnection = (connObj) => {
 };
 
 const executeQuery = (connectionConfig, query) => new Promise((resolve, reject) => {
+   console.log(connectionConfig);
+   console.log(query);
   sql.connect(connectionConfig, (err) => {
     if (err) {
       reject(err);
@@ -96,6 +98,7 @@ const executeQuery = (connectionConfig, query) => new Promise((resolve, reject) 
     // const request = new sql.request();
     sql.query(query, (error, result) => {
       if (error) {
+        console.log(error);
         reject(error);
       } else {
         resolve(result);
