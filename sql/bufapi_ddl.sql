@@ -49,7 +49,7 @@ create table bufapi_endpoint
 (
     endpointid  serial constraint bufapi_endpoint_pk primary key,
     endpointname varchar(100) not null,
-    endpoint_query text,
+    endpointquery text,
     connid integer not null,
     createdat timestamptz not null,
     updatedat timestamptz null
