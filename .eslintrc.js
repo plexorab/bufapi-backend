@@ -16,5 +16,6 @@ module.exports = {
     'linebreak-style': 'off',
     'consistent-return': 'off',
     'no-continue': 'off',
+    'no-useless-catch': 'off',
   },
 };
