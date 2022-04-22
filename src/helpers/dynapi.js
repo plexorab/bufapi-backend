@@ -37,8 +37,12 @@ const getEndpointData = (pgPool, endpointid) => new Promise((resolve, reject) =>
   pgPool.connect().then((client) => client
     .query(sqlcmd, params)
     .then((response) => {
-      client.release();
-      resolve(response.rows[0]);
+      if (response.rowCount === 0) {
+        throw new Error('Invalid endpoint id');
+      } else {
+        client.release();
+        resolve(response.rows[0]);
+      }
     })
     .catch((err) => {
       client.release();
@@ -46,14 +50,18 @@ const getEndpointData = (pgPool, endpointid) => new Promise((resolve, reject) =>
     }));
 });
 
-const getEndpointConnectionData = (pgPool, endpointid) => new Promise((resolve, reject) => {
-  const sqlcmd = 'SELECT * FROM bufapi_endpoint_conn WHERE endpointid = $1';
-  const params = [endpointid];
+const getEndpointConnectionData = (pgPool, connid) => new Promise((resolve, reject) => {
+  const sqlcmd = 'SELECT * FROM bufapi_endpoint_conn WHERE connid = $1';
+  const params = [connid];
   pgPool.connect().then((client) => client
     .query(sqlcmd, params)
     .then((response) => {
-      client.release();
-      resolve(response.rows[0]);
+      if (response.rowCount === 0) {
+        throw new Error('Invalid connection id');
+      } else {
+        client.release();
+        resolve(response.rows[0]);
+      }
     })
     .catch((err) => {
       client.release();
@@ -110,12 +118,12 @@ const executeQuery = (connectionConfig, query) => new Promise((resolve, reject) 
 const executeDynQuery = async (pgPool, username, endpointid) => {
   try {
     const userObj = await getUserData(pgPool, username);
+    const endpointObj = await getEndpointData(pgPool, endpointid);
     const perm = await checkEndpointPerm(pgPool, userObj.userid, endpointid);
     if (parseInt(perm.count, 10) === 0) {
       throw new Error('No permission');
     }
-    const endpointObj = await getEndpointData(pgPool, endpointid);
-    const endpointConnObj = await getEndpointConnectionData(pgPool, endpointid);
+    const endpointConnObj = await getEndpointConnectionData(pgPool, endpointObj.connid);
     const connectionConfig = parseConnection(endpointConnObj);
     const result = await executeQuery(connectionConfig, endpointObj.endpointquery);
     return result.recordset;
