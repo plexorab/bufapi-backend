@@ -10,7 +10,6 @@ module.exports = (app, pool) => {
   app.use((req, res, next) => {
     const ip = req.clientIp;
     res.locals.clientip = ip;
-    // console.log(ip);
     return next();
   });
   /*
@@ -23,7 +22,6 @@ module.exports = (app, pool) => {
       return next();
     }
     if (req.originalUrl === process.env.SIGNIN_URL) {
-      // console.log('Sign in request');
       return next();
     }
     if (!req.headers.sessionid) {
@@ -33,12 +31,9 @@ module.exports = (app, pool) => {
         message: 'No sessionid supplied',
       });
     } else {
-      console.log('sessionid = ', req.headers.sessionid);
-      console.log('client ip = ', res.locals.clientip);
       validateSession(pool, req.headers.sessionid)
         .then((r) => {
           if (r.success) {
-            console.log(r.data);
             return next();
           }
           res.status(401).send({
@@ -94,7 +89,6 @@ module.exports = (app, pool) => {
           }
         })
         .catch((err) => {
-          console.log(err);
           res.status(400).send({
             success: false,
             data: null,

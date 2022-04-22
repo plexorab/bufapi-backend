@@ -1,5 +1,4 @@
 const { body, validationResult } = require('express-validator');
-// const { hashPassword } = require('../helpers/password');
 const log = require('../log/log');
 
 module.exports = async (app, pool) => {
@@ -114,7 +113,6 @@ module.exports = async (app, pool) => {
   //* Delete an endpoint
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   app.delete('/api/bufab/v1/admin/endpoint/delete', (req, res) => {
-    console.log(req.query);
     if (!req.query.endpointid) {
       res.status(400).send({
         success: false,
@@ -158,7 +156,6 @@ module.exports = async (app, pool) => {
   //* Edit an endpoint
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   app.patch('/api/bufab/v1/admin/endpoint/edit', (req, res) => {
-    console.log(req.query);
     if (!req.query.endpointid || !req.query.endpointname || !req.query.endpointquery) {
       res.status(400).send({
         success: false,
@@ -198,5 +195,4 @@ module.exports = async (app, pool) => {
         });
       });
   });
-
 };

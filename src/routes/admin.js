@@ -121,9 +121,8 @@ module.exports = async (app, pool) => {
       }
       hashPassword(req.body.password)
         .then((hashedPassword) => {
-          console.log(hashedPassword);
           const sqlcmd = 'INSERT INTO bufapi_user (username, realname, password) '
-        + 'VALUES($1, $2, $3)';
+           + 'VALUES($1, $2, $3)';
           const params = [req.body.username, req.body.realname, hashedPassword];
           pool.connect().then((client) => client
             .query(sqlcmd, params)
@@ -203,7 +202,6 @@ module.exports = async (app, pool) => {
   //* Edit a user
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   app.patch('/api/bufab/v1/admin/user/edit', (req, res) => {
-    console.log(req.query);
     if (!req.query.userid || !req.query.username || !req.query.realname) {
       res.status(400).send({
         success: false,
