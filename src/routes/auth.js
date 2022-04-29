@@ -53,6 +53,50 @@ module.exports = (app, pool) => {
     }
   });
 
+  app.get('/api/bufab/v1/auth/signin', (req, res) => {
+    if (!req.query.username || !req.query.password) {
+      res.status(400).send({
+        success: false,
+        data: null,
+        message: 'Query parameters username and/or password is missing',
+      });
+    } else {
+      verifySignIn(pool, req.query.username, req.query.password)
+        .then((response) => {
+          if (response) {
+            createSession(pool, req.query.username, res.locals.clientip)
+              .then((r) => {
+                res.status(200).send({
+                  success: true,
+                  data: r,
+                  message: 'You are signed in successfully',
+                });
+              })
+              .catch((e) => {
+                res.status(400).send({
+                  success: false,
+                  data: null,
+                  message: e.toString(),
+                });
+              });
+          } else {
+            res.status(200).send({
+              success: false,
+              data: null,
+              message: 'Invalid username or password',
+            });
+          }
+        })
+        .catch((err) => {
+          res.status(400).send({
+            success: false,
+            data: null,
+            message: err.toString(),
+          });
+        });
+    }
+  });
+
   app.post(
     '/api/bufab/v1/auth/signin',
     body('username').isString(),
