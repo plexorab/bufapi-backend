@@ -16,7 +16,7 @@ module.exports = (app, pool) => {
   ** This route intercepts everything directed
   ** to /api/bufab/*
   */
-  app.use('/api/bufab', (req, res, next) => {
+  app.use('/api/bufapi', (req, res, next) => {
     if (process.env.DEVELOPMENT_MODE > 0) {
       console.log('DEVELOPMENT_MODE');
       return next();
@@ -53,7 +53,7 @@ module.exports = (app, pool) => {
     }
   });
 
-  app.get('/api/bufab/v1/auth/signin', (req, res) => {
+  app.get('/api/bufapi/v1/auth/signin', (req, res) => {
     if (!req.query.username || !req.query.password) {
       res.status(400).send({
         success: false,
@@ -98,7 +98,7 @@ module.exports = (app, pool) => {
   });
 
   app.post(
-    '/api/bufab/v1/auth/signin',
+    '/api/bufapi/v1/auth/signin',
     body('username').isString(),
     body('password').isString(),
     (req, res) => {

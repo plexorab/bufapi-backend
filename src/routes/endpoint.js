@@ -5,7 +5,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Get all endpoints
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.get('/api/bufab/v1/admin/endpoint/list', (req, res) => {
+  app.get('/api/bufapi/v1/admin/endpoint/list', (req, res) => {
     pool.connect().then((client) => client
       .query('SELECT * FROM bufapi_endpoint')
       .then((response) => {
@@ -30,7 +30,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Get one endpoint by endpointid
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.get('/api/bufab/v1/admin/endpoint/getById', (req, res) => {
+  app.get('/api/bufapi/v1/admin/endpoint/getById', (req, res) => {
     if (!req.query.endpointid) {
       res.status(400).send({
         success: false,
@@ -67,7 +67,7 @@ module.exports = async (app, pool) => {
   //* Create an endpoint
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   app.post(
-    '/api/bufab/v1/admin/endpoint/create',
+    '/api/bufapi/v1/admin/endpoint/create',
     body('endpointname').isString().isLength({ min: 3 }),
     body('endpointquery').isString(),
     (req, res) => {
@@ -112,7 +112,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Delete an endpoint
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.delete('/api/bufab/v1/admin/endpoint/delete', (req, res) => {
+  app.delete('/api/bufapi/v1/admin/endpoint/delete', (req, res) => {
     if (!req.query.endpointid) {
       res.status(400).send({
         success: false,
@@ -155,7 +155,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Edit an endpoint
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.patch('/api/bufab/v1/admin/endpoint/edit', (req, res) => {
+  app.patch('/api/bufapi/v1/admin/endpoint/edit', (req, res) => {
     if (!req.query.endpointid || !req.query.endpointname || !req.query.endpointquery) {
       res.status(400).send({
         success: false,

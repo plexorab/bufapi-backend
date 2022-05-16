@@ -53,6 +53,5 @@ require('./routes/auth')(app, pgpool);
 require('./routes/admin')(app, pgpool);
 require('./routes/dynapi')(app, pgpool);
 require('./routes/endpoint')(app, pgpool);
-// require('./routes/superoffice')(app, pool);
 
 module.exports = app;

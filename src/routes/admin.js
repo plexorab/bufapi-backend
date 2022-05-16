@@ -7,7 +7,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Get all user
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.get('/api/bufab/v1/admin/user/list', (req, res) => {
+  app.get('/api/bufapi/v1/admin/user/list', (req, res) => {
     pool.connect().then((client) => client
       .query('SELECT * FROM bufapi_user')
       .then((response) => {
@@ -37,7 +37,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Get one user by userid
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.get('/api/bufab/v1/admin/user/getById', (req, res) => {
+  app.get('/api/bufapi/v1/admin/user/getById', (req, res) => {
     if (!req.query.userid) {
       res.status(400).send({
         success: false,
@@ -73,7 +73,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Get one user by username
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.get('/api/bufab/v1/admin/user/getByName', (req, res) => {
+  app.get('/api/bufapi/v1/admin/user/getByName', (req, res) => {
     if (!req.query.username) {
       res.status(400).send({
         success: false,
@@ -110,7 +110,7 @@ module.exports = async (app, pool) => {
   //* Create a user
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   app.post(
-    '/api/bufab/v1/admin/user/create',
+    '/api/bufapi/v1/admin/user/create',
     body('username').isString().isLength({ min: 4 }),
     body('realname').isString(),
     body('password').isString().isLength({ min: 8, max: 64 }),
@@ -159,7 +159,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Delete a user
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.delete('/api/bufab/v1/admin/user/delete', (req, res) => {
+  app.delete('/api/bufapi/v1/admin/user/delete', (req, res) => {
     if (!req.query.userid) {
       res.status(400).send({
         success: false,
@@ -201,7 +201,7 @@ module.exports = async (app, pool) => {
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //* Edit a user
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.patch('/api/bufab/v1/admin/user/edit', (req, res) => {
+  app.patch('/api/bufapi/v1/admin/user/edit', (req, res) => {
     if (!req.query.userid || !req.query.username || !req.query.realname) {
       res.status(400).send({
         success: false,
@@ -246,7 +246,7 @@ module.exports = async (app, pool) => {
   //* Change a users password
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   app.post(
-    '/api/bufab/v1/admin/user/pwchange',
+    '/api/bufapi/v1/admin/user/pwchange',
     body('userid').isNumeric(),
     body('password').isString().isLength({ min: 8, max: 64 }),
     (req, res) => {

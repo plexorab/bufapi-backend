@@ -6,7 +6,7 @@ module.exports = async (app, pool) => {
   //* username : username
   //* endpointid: Endpoint ID
   //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  app.get('/api/bufab/v1/dynapi/get', (req, res) => {
+  app.get('/api/bufapi/v1/dynapi/get', (req, res) => {
     if (!req.query.username) {
       return res.status(400).send({
         success: false,
